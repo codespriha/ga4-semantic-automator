@@ -1,5 +1,5 @@
 {
-  "name": "ga4-semantic-automator",
+  "name": "@codespriha/ga4-semantic-automator",
   "version": "0.1.0",
   "description": "Zero-dependency GA4 auto-initialization and semantic interaction tracking via DOM event delegation and declarative data-attribute overrides.",
   "type": "module",
