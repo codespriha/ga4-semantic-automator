@@ -1,0 +1,46 @@
+{
+  "name": "ga4-semantic-automator",
+  "version": "0.1.0",
+  "description": "Zero-dependency GA4 auto-initialization and semantic interaction tracking via DOM event delegation and declarative data-attribute overrides.",
+  "type": "module",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    }
+  },
+  "files": [
+    "src"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "lint": "eslint src test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "keywords": [
+    "ga4",
+    "analytics",
+    "google-analytics",
+    "gtag",
+    "event-tracking",
+    "event-delegation",
+    "data-layer",
+    "tracking"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "jsdom": "^26.0.0",
+    "prettier": "^3.4.2"
+  }
+}
