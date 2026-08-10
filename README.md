@@ -1,5 +1,7 @@
 # ga4-semantic-automator
 
+> **[Live demo](https://codespriha.github.io/ga4-semantic-automator/demo/)** — click the buttons and links, then watch the structured `ui_interaction` payloads land in the data layer.
+
 Zero-dependency Google Analytics 4 (GA4) automation for vanilla JavaScript and
 TypeScript projects. It initializes GA4 for you and **automatically captures
 semantic user interactions across the entire DOM** using a single delegated

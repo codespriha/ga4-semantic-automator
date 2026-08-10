@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ga4-semantic-automator — demo</title>
+    <style>
+      :root {
+        --bg: #0f1117;
+        --panel: #171a23;
+        --panel-2: #1e2230;
+        --border: #2a2f42;
+        --text: #e6e8ef;
+        --muted: #9aa1b5;
+        --accent: #7c8cff;
+        --green: #4ade80;
+        --amber: #fbbf24;
+        --red: #f87171;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          Consolas,
+          monospace;
+        background: var(--bg);
+        color: var(--text);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      header {
+        border-bottom: 1px solid var(--border);
+        padding: 1.25rem 1.5rem;
+        background: var(--panel);
+      }
+      header h1 {
+        margin: 0 0 0.25rem;
+        font-size: 1.15rem;
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 1rem;
+        padding: 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+      section.card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1rem;
+      }
+      section.card h2 {
+        margin: 0 0 0.75rem;
+        font-size: 0.95rem;
+        color: var(--accent);
+      }
+      .row {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.75rem;
+      }
+      .row:last-child {
+        margin-bottom: 0;
+      }
+      button,
+      .fake-button,
+      a.btn {
+        font: inherit;
+        color: var(--text);
+        background: var(--panel-2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.5rem 0.9rem;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      button:hover,
+      .fake-button:hover,
+      a.btn:hover {
+        border-color: var(--accent);
+      }
+      .icon {
+        font-size: 0.9em;
+      }
+      .badge {
+        display: inline-block;
+        background: var(--panel-2);
+        border: 1px solid var(--border);
+        color: var(--muted);
+        border-radius: 5px;
+        padding: 0.1rem 0.45rem;
+        font-size: 0.75rem;
+        margin-left: 0.35rem;
+      }
+      .hint {
+        color: var(--muted);
+        font-size: 0.78rem;
+        margin: 0 0 0.6rem;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .log-panel {
+        position: sticky;
+        top: 1.5rem;
+        height: fit-content;
+        max-height: calc(100vh - 3rem);
+        display: flex;
+        flex-direction: column;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .log-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .log-head h2 {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--accent);
+      }
+      .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        margin-right: 0.4rem;
+        animation: pulse 1.6s infinite;
+      }
+      @keyframes pulse {
+        50% {
+          opacity: 0.35;
+        }
+      }
+      .log-head button {
+        padding: 0.25rem 0.6rem;
+        font-size: 0.75rem;
+      }
+      #log {
+        overflow-y: auto;
+        padding: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        min-height: 200px;
+      }
+      .entry {
+        border: 1px solid var(--border);
+        background: var(--panel-2);
+        border-radius: 8px;
+        padding: 0.55rem 0.7rem;
+        animation: slide-in 0.15s ease-out;
+      }
+      @keyframes slide-in {
+        from {
+          transform: translateY(-4px);
+          opacity: 0;
+        }
+      }
+      .entry .top {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.3rem;
+      }
+      .entry .evt {
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .entry .kind {
+        font-size: 0.68rem;
+        padding: 0.05rem 0.4rem;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+      .entry .kind.config {
+        color: var(--amber);
+        border-color: var(--amber);
+      }
+      .entry .kind.event {
+        color: var(--green);
+        border-color: var(--green);
+      }
+      .entry .time {
+        margin-left: auto;
+        color: var(--muted);
+        font-size: 0.7rem;
+      }
+      .entry pre {
+        margin: 0;
+        font-size: 0.75rem;
+        color: var(--muted);
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      .empty {
+        color: var(--muted);
+        font-size: 0.8rem;
+        text-align: center;
+        padding: 2rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>ga4-semantic-automator <span class="badge">live demo</span></h1>
+      <p>
+        One <code>initGA4()</code> call captures every click on interactive elements across the DOM.
+        Click anything below and watch the structured event hit the data layer — no per-element
+        tracking code. <span class="muted">(Real GA4 hits are disabled here; the data layer is intercepted locally.)</span>
+      </p>
+    </header>
+
+    <div class="layout">
+      <div>
+        <section class="card" id="hero">
+          <h2>Section #hero — plain buttons</h2>
+          <div class="row">
+            <button id="cta" class="btn primary">Get started</button>
+            <button>Secondary action</button>
+            <button><span class="icon">→</span> Button with a child element</button>
+          </div>
+          <p class="hint">
+            Clicks on the icon/text inside a button resolve to the nearest
+            <code>button</code> ancestor. Note the <code>element_id</code>, <code>element_class</code>
+            and <code>structural_container: "section#hero"</code> in the log.
+          </p>
+        </section>
+
+        <section class="card" id="pricing">
+          <h2>Section #pricing — declarative overrides</h2>
+          <div class="row">
+            <button data-ga-event="pricing_cta_click">Buy now</button>
+            <button data-ga-label="Pricing hero CTA">See plans</button>
+            <div class="fake-button" role="button" tabindex="0" aria-label="Toggle FAQ list">
+              Toggle FAQ <span class="muted">(role="button")</span>
+            </div>
+          </div>
+          <p class="hint">
+            <code>data-ga-event</code> renames the event; <code>data-ga-label</code> overrides
+            <code>element_text</code> and sets <code>element_label</code>;
+            <code>role="button"</code> is tracked via <code>aria-label</code>.
+          </p>
+        </section>
+
+        <section class="card">
+          <h2>Nav — anchors &amp; outbound links</h2>
+          <div class="row">
+            <a class="btn" href="#pricing">Internal anchor</a>
+            <a class="btn" href="https://github.com/codespriha/ga4-semantic-automator" target="_blank" rel="noopener">
+              Outbound link
+            </a>
+          </div>
+          <p class="hint">
+            Anchors capture <code>destination</code> and set <code>is_outbound: true</code> when the
+            host differs from the current page.
+          </p>
+        </section>
+
+        <section class="card" data-ga-ignore>
+          <h2>Cookie banner — <code>data-ga-ignore</code></h2>
+          <div class="row">
+            <button>Accept cookies</button>
+            <button>Reject cookies</button>
+          </div>
+          <p class="hint">
+            The whole section is marked <code>data-ga-ignore</code>. Clicking these buttons
+            produces <strong class="muted">no</strong> log entry.
+          </p>
+        </section>
+      </div>
+
+      <div class="log-panel">
+        <div class="log-head">
+          <h2><span class="dot"></span>Data layer log</h2>
+          <button id="clear" data-ga-ignore>Clear</button>
+        </div>
+        <div id="log">
+          <div class="empty">Waiting for interactions…</div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { initGA4 } from '../src/index.js';
+
+      const logList = document.getElementById('log');
+      const EMPTY_HINT = 'Waiting for interactions…';
+      let count = 0;
+
+      function render(kind, name, params) {
+        const node = document.createElement('div');
+        node.className = 'entry';
+        const time = new Date().toLocaleTimeString();
+        node.innerHTML = `
+          <div class="top">
+            <span class="evt">${name}</span>
+            <span class="kind ${kind}">${kind}</span>
+            <span class="time">${time}</span>
+          </div>
+          <pre>${JSON.stringify(params, null, 2)}</pre>
+        `;
+        const empty = logList.querySelector('.empty');
+        if (empty) {
+          empty.remove();
+        }
+        logList.prepend(node);
+        count += 1;
+      }
+
+      window.dataLayer = [];
+      const originalPush = window.dataLayer.push.bind(window.dataLayer);
+      window.dataLayer.push = (item) => {
+        originalPush(item);
+        if (item[0] === 'event' || item[0] === 'config') {
+          render(item[0], String(item[1]), item[2] ?? {});
+        }
+      };
+
+      initGA4('G-XXXXXXXXXX', { debug: true });
+
+      document.getElementById('clear').addEventListener('click', () => {
+        logList.innerHTML = `<div class="empty">${EMPTY_HINT}</div>`;
+      });
+    </script>
+  </body>
+</html>
